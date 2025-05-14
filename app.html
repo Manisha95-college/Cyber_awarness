@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>Cyber Awarness & Protection</title>
+<style>
+  /* Reset */
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #4b0000, #7a0d0d, #a83434);
+    color: #ffecec;
+    line-height: 1.5;
+    padding: 1rem 1.2rem 2rem;
+    max-width: 350px;
+    margin-left: auto;
+    margin-right: auto;
+    overflow-y: auto;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  header {
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+  header h1 {
+    font-weight: 900;
+    font-size: 2rem;
+    letter-spacing: 1.25px;
+    color: #ff4c4c;
+    text-shadow: 0 0 8px #ff9393cc;
+    margin-bottom: 0.25rem;
+  }
+  header p {
+    font-size: 0.85rem;
+    color: #ffaaaa;
+    margin-bottom: 0.5rem;
+  }
+
+  nav {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+  }
+  nav button {
+    background: #ff4c4c;
+    border: none;
+    padding: 0.5rem 1.2rem;
+    font-weight: 700;
+    color: #3a0000;
+    border-radius: 25px;
+    box-shadow: 0 3px 6px rgba(255, 76, 76, 0.7);
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    user-select: none;
+    flex: 1 1 140px;
+    max-width: 180px;
+  }
+  nav button.active,
+  nav button:hover,
+  nav button:focus {
+    background: #ff9999;
+    color: #600000;
+    outline: none;
+    box-shadow: 0 0 12px 3px #ff9999cc;
+  }
+
+  main {
+    flex-grow: 1;
+  }
+  ul.tips-list {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+  }
+  ul.tips-list li {
+    background: rgba(80, 10, 10, 0.85);
+    margin-bottom: 12px;
+    border-radius: 12px;
+    padding: 0.8rem 1rem;
+    box-shadow: 0 4px 12px rgba(255, 76, 76, 0.5);
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  ul.tips-list li:hover,
+  ul.tips-list li:focus {
+    background: #bb3a3a;
+    outline: none;
+  }
+
+  /* Container holding all checkers vertically */
+  #checkers-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+  }
+
+  /* Individual checker section styling */
+  #password-section, #website-section, #phone-section {
+    background: rgba(80, 10, 10, 0.85);
+    border-radius: 12px;
+    padding: 1rem 1.2rem;
+    box-shadow: 0 4px 12px rgba(255, 76, 76, 0.6);
+  }
+  #password-section h2, #website-section h2, #phone-section h2 {
+    margin-top: 0;
+    margin-bottom: 0.8rem;
+    color: #ff4c4c;
+    font-weight: 700;
+    font-size: 1.25rem;
+  }
+  #password-section label, #website-section label, #phone-section label {
+    display: block;
+    margin-bottom: 0.4rem;
+    font-weight: 600;
+  }
+  #password-section input[type="password"],
+  #website-section input[type="url"],
+  #phone-section input[type="tel"] {
+    width: 100%;
+    padding: 0.5rem 0.8rem;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: none;
+    outline: none;
+    box-shadow: inset 0 0 6px #ff4c4c;
+    background: #330000;
+    color: #ffecec;
+    margin-bottom: 0.8rem;
+  }
+  #password-section button,
+  #website-section button,
+  #phone-section button {
+    background: #ff4c4c;
+    border: none;
+    padding: 0.5rem 1rem;
+    font-weight: 700;
+    color: #3a0000;
+    border-radius: 25px;
+    box-shadow: 0 3px 6px rgba(255, 76, 76, 0.7);
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    user-select: none;
+    width: 100%;
+    font-size: 1rem;
+  }
+  #password-section button:hover,
+  #password-section button:focus,
+  #website-section button:hover,
+  #website-section button:focus,
+  #phone-section button:hover,
+  #phone-section button:focus {
+    background: #ff9999;
+    color: #600000;
+    outline: none;
+    box-shadow: 0 0 12px 3px #ff9999cc;
+  }
+  #strength-result,
+  #security-result,
+  #spam-result {
+    margin-top: 0.8rem;
+    font-weight: 700;
+    font-size: 1rem;
+    min-height: 1.2em;
+  }
+  #strength-result.weak {
+    color: #ff6b6b;
+    text-shadow: 0 0 10px #ff6b6bbb;
+  }
+  #strength-result.medium {
+    color: #ffb84c;
+    text-shadow: 0 0 10px #ffb84cbb;
+  }
+  #strength-result.strong {
+    color: #9fff74;
+    text-shadow: 0 0 10px #9fff74bb;
+  }
+  #security-result.secure {
+    color: #9fff74;
+    text-shadow: 0 0 10px #9fff74bb;
+  }
+  #security-result.insecure {
+    color: #ff6b6b;
+    text-shadow: 0 0 10px #ff6b6bbb;
+  }
+  #security-result.invalid {
+    color: #ffb84c;
+    text-shadow: 0 0 10px #ffb84cbb;
+  }
+  #spam-result.spam {
+    color: #ff6b6b;
+    text-shadow: 0 0 10px #ff6b6bbb;
+  }
+  #spam-result.safe {
+    color: #9fff74;
+    text-shadow: 0 0 10px #9fff74bb;
+  }
+  #spam-result.unknown {
+    color: #ffb84c;
+    text-shadow: 0 0 10px #ffb84cbb;
+  }
+
+  footer {
+    text-align: center;
+    font-size: 0.75rem;
+    color: #ff99998a;
+    padding-top: 1rem;
+  }
+
+  /* Modal styles */
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right:0;
+    bottom: 0;
+    background: rgba(75, 0, 0, 0.85);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    padding: 1rem;
+  }
+  .modal-overlay.active {
+    display: flex;
+  }
+  .modal-content {
+    background: #330000;
+    border-radius: 14px;
+    max-width: 320px;
+    width: 100%;
+    padding: 1.5rem 1.75rem;
+    box-shadow: 0 8px 20px rgba(255, 76, 76, 0.7);
+    color: #ffcccc;
+    position: relative;
+    max-height: 80vh;
+    overflow-y: auto;
+    user-select: text;
+  }
+  .modal-content h3 {
+    margin-top: 0;
+    margin-bottom: 0.75rem;
+    font-weight: 700;
+    color: #ff4c4c;
+    letter-spacing: 0.5px;
+  }
+  .modal-content p {
+    font-size: 0.95rem;
+    line-height: 1.4;
+  }
+  .modal-close-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    color: #ff6666;
+    cursor: pointer;
+    transition: color 0.2s ease;
+  }
+  .modal-close-btn:hover,
+  .modal-close-btn:focus {
+    color: #ff9999;
+    outline: none;
+  }
+
+  /* Responsive padding adjustments */
+  @media (max-height: 600px) {
+    body {
+      padding: 0.5rem 0.8rem 1rem;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+</head>
+<body>
+<header role="banner">
+  <h1>Cybersecurity Awareness</h1>
+  <p>Interactive guide to protect yourself against cyber threats</p>
+</header>
+
+<nav role="navigation" aria-label="Cybersecurity Tip Categories">
+  <button id="btn-general" class="active" aria-pressed="true" aria-controls="tips-section">General Tips</button>
+  <button id="btn-threats" aria-pressed="false" aria-controls="tips-section">How to Get Rid of Threats</button>
+</nav>
+
+<main role="main" tabindex="0">
+  <section id="tips-section" aria-live="polite" aria-atomic="true">
+    <ul class="tips-list" tabindex="0" role="list" aria-label="Cybersecurity tips list">
+      <!-- dynamically rendered tips go here -->
+    </ul>
+  </section>
+
+  <div id="checkers-container" aria-label="Security tool checkers">
+    <!-- Password Strength Checker Section -->
+    <section id="password-section" aria-labelledby="password-checker-title">
+      <h2 id="password-checker-title">Password Strength Checker</h2>
+      <label for="password-input">Enter your password:</label>
+      <input type="password" id="password-input" aria-describedby="password-help" placeholder="Enter password here" />
+      <button id="check-password-btn">Check Strength</button>
+      <div id="strength-result" aria-live="polite" aria-atomic="true"></div>
+      <div id="password-help" style="font-size:0.8rem; color:#ffb4b4; margin-top:0.4rem;">
+        Password strength requirements:<br />
+        - At least 8 characters<br />
+        - Includes lowercase and uppercase letters<br />
+        - Includes numbers<br />
+        - Includes special characters
+      </div>
+    </section>
+
+    <!-- Website Security Checker Section -->
+    <section id="website-section" aria-labelledby="website-checker-title">
+      <h2 id="website-checker-title">Website Security Checker</h2>
+      <label for="website-input">Enter website URL:</label>
+      <input type="url" id="website-input" placeholder="https://example.com" aria-describedby="website-help" />
+      <button id="check-website-btn">Check Website</button>
+      <div id="security-result" aria-live="polite" aria-atomic="true"></div>
+      <div id="website-help" style="font-size:0.8rem; color:#ffb4b4; margin-top:0.4rem;">
+        Basic check of website URL security (HTTPS, valid format)
+      </div>
+    </section>
+
+    <!-- Phone Number Spam Checker Section -->
+    <section id="phone-section" aria-labelledby="phone-checker-title">
+      <h2 id="phone-checker-title">Phone Number Spam Checker</h2>
+      <label for="phone-input">Enter phone number:</label>
+      <input type="tel" id="phone-input" placeholder="+1234567890" aria-describedby="phone-help" />
+      <button id="check-phone-btn">Check Number</button>
+      <div id="spam-result" aria-live="polite" aria-atomic="true"></div>
+      <div id="phone-help" style="font-size:0.8rem; color:#ffb4b4; margin-top:0.4rem;">
+        Checks if the phone number is known spam (sample database)
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer>
+  &copy; 2024 Cybersecurity Awareness Guide
+</footer>
+
+<div id="modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title" tabindex="-1">
+  <div class="modal-content">
+    <button class="modal-close-btn" aria-label="Close dialog">&times;</button>
+    <h3 id="modal-title">Title</h3>
+    <p id="modal-body">Content goes here...</p>
+  </div>
+</div>
+
+<script>
+  (function() {
+    const tipsData = {
+      general: {
+        title: 'General Cyber Security Tips',
+        content: [
+          'Keep your software and OS updated with the latest patches.',
+          'Use strong, unique passwords for all your accounts.',
+          'Enable two-factor authentication (2FA) wherever possible.',
+          'Be cautious when clicking links or opening attachments in emails.',
+          'Use reliable antivirus and anti-malware software.',
+          'Secure your home Wi-Fi with strong encryption.'
+        ]
+      },
+      threatRemoval: {
+        title: 'How to Get Rid of Cyber Threats',
+        content: [
+          'Run a full system virus scan with your updated antivirus software.',
+          'Disconnect from the internet if you suspect malware infection.',
+          'Delete suspicious files or programs you did not install.',
+          'Change passwords after cleaning your system.',
+          'Restore files from backup if ransomware or data loss occurred.',
+          'Consult a cybersecurity professional for severe incidents.'
+        ]
+      }
+    };
+
+    // Sample spam phone numbers database (normalized to digits only)
+    const spamPhoneNumbers = new Set([
+      '18001234567',
+      '1234567890',
+      '9999999999',
+      '5555555555',
+      '8001234567'
+    ]);
+
+    const navGeneral = document.getElementById('btn-general');
+    const navThreats = document.getElementById('btn-threats');
+    const tipsSection = document.getElementById('tips-section');
+    const tipsList = tipsSection.querySelector('.tips-list');
+    const modal = document.getElementById('modal');
+    const modalTitle = document.getElementById('modal-title');
+    const modalBody = document.getElementById('modal-body');
+    const modalCloseBtn = modal.querySelector('.modal-close-btn');
+
+    // Password checker elements
+    const passwordInput = document.getElementById('password-input');
+    const checkPasswordBtn = document.getElementById('check-password-btn');
+    const strengthResult = document.getElementById('strength-result');
+
+    // Website checker elements
+    const websiteInput = document.getElementById('website-input');
+    const checkWebsiteBtn = document.getElementById('check-website-btn');
+    const securityResult = document.getElementById('security-result');
+
+    // Phone checker elements
+    const phoneInput = document.getElementById('phone-input');
+    const checkPhoneBtn = document.getElementById('check-phone-btn');
+    const spamResult = document.getElementById('spam-result');
+
+    // Track last focused element to restore focus after modal closes
+    let lastFocusedElement = null;
+
+    function renderTips(category) {
+      tipsList.innerHTML = '';
+      const tips = tipsData[category].content;
+      tips.forEach((tip, index) => {
+        const li = document.createElement('li');
+        li.tabIndex = 0;
+        li.setAttribute('role', 'listitem');
+        li.textContent = tip;
+        li.dataset.tipIndex = index;
+        li.dataset.category = category;
+        li.addEventListener('click', openModal);
+        li.addEventListener('keydown', e => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            openModal.call(li);
+          }
+        });
+        tipsList.appendChild(li);
+      });
+    }
+
+    function openModal(event) {
+      lastFocusedElement = document.activeElement;
+      const tipIndex = this.dataset.tipIndex;
+      const category = this.dataset.category;
+      modalTitle.textContent = tipsData[category].title;
+      modalBody.textContent = tipsData[category].content[tipIndex];
+      modal.classList.add('active');
+      modal.setAttribute('tabindex', '0');
+      modal.focus();
+
+      // Trap focus inside modal
+      document.addEventListener('focus', trapFocus, true);
+      document.addEventListener('keydown', handleKeyDown);
+    }
+
+    function closeModal() {
+      modal.classList.remove('active');
+      modalTitle.textContent = '';
+      modalBody.textContent = '';
+      if (lastFocusedElement) lastFocusedElement.focus();
+      document.removeEventListener('focus', trapFocus, true);
+      document.removeEventListener('keydown', handleKeyDown);
+    }
+
+    function trapFocus(event) {
+      if (!modal.contains(event.target)) {
+        event.stopPropagation();
+        modal.focus();
+      }
+    }
+
+    function handleKeyDown(event) {
+      if (event.key === 'Escape' || event.key === 'Esc') {
+        closeModal();
+      }
+    }
+
+    // Nav button events
+    navGeneral.addEventListener('click', () => {
+      setActiveCategory('general');
+    });
+    navThreats.addEventListener('click', () => {
+      setActiveCategory('threatRemoval');
+    });
+
+    function setActiveCategory(category) {
+      if (category === 'general') {
+        navGeneral.classList.add('active');
+        navGeneral.setAttribute('aria-pressed', 'true');
+        navThreats.classList.remove('active');
+        navThreats.setAttribute('aria-pressed', 'false');
+      } else {
+        navThreats.classList.add('active');
+        navThreats.setAttribute('aria-pressed', 'true');
+        navGeneral.classList.remove('active');
+        navGeneral.setAttribute('aria-pressed', 'false');
+      }
+      renderTips(category);
+    }
+
+    // Modal close button event
+    modalCloseBtn.addEventListener('click', closeModal);
+
+    // Close modal on clicking outside modal content
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        closeModal();
+      }
+    });
+
+    // Password strength checker function
+    function checkPasswordStrength(password) {
+      const results = {
+        length: password.length >= 8,
+        lowercase: /[a-z]/.test(password),
+        uppercase: /[A-Z]/.test(password),
+        number: /\d/.test(password),
+        specialChar: /[!@#$%^&*(),.?":{}|<>]/.test(password),
+      };
+      const passedCount = Object.values(results).filter(Boolean).length;
+
+      if (passedCount === 5) return {score: 3, text: 'Strong password'};
+      if (passedCount >= 3) return {score: 2, text: 'Medium strength password'};
+      return {score: 1, text: 'Weak password'};
+    }
+
+    function displayStrength() {
+      const pwd = passwordInput.value.trim();
+      if(pwd.length === 0){
+        strengthResult.textContent = '';
+        strengthResult.className = '';
+        return;
+      }
+      const {score, text} = checkPasswordStrength(pwd);
+      strengthResult.textContent = text;
+      strengthResult.className = '';
+      if(score === 3) strengthResult.classList.add('strong');
+      else if(score === 2) strengthResult.classList.add('medium');
+      else strengthResult.classList.add('weak');
+    }
+
+    // Website security checker function
+    function checkWebsiteSecurity(url) {
+      if(url.length === 0) {
+        securityResult.textContent = '';
+        securityResult.className = '';
+        return;
+      }
+      let parsedUrl;
+      try {
+        parsedUrl = new URL(url.startsWith('http') ? url : 'http://' + url);
+      } catch {
+        securityResult.textContent = 'Invalid URL';
+        securityResult.className = 'invalid';
+        return;
+      }
+      // Basic security assessment
+      if(parsedUrl.protocol !== 'https:') {
+        securityResult.textContent = 'Potentially Insecure: Not HTTPS';
+        securityResult.className = 'insecure';
+        return;
+      }
+      // Could add more checks like domain reputation api calls, but here just simple heuristic:
+      securityResult.textContent = 'Likely Secure (uses HTTPS)';
+      securityResult.className = 'secure';
+    }
+
+    // Spam phone checker function
+    function normalizePhoneNumber(num) {
+      return num.replace(/\D/g, '');
+    }
+
+    function checkSpamPhoneNumber(phone) {
+      if(phone.length === 0) {
+        spamResult.textContent = '';
+        spamResult.className = '';
+        return;
+      }
+      const normalized = normalizePhoneNumber(phone);
+      if(normalized.length < 7) {
+        spamResult.textContent = 'Invalid or too short number';
+        spamResult.className = 'unknown';
+        return;
+      }
+      if(spamPhoneNumbers.has(normalized)) {
+        spamResult.textContent = 'Warning: This number is known spam!';
+        spamResult.className = 'spam';
+      }
+      else {
+        spamResult.textContent = 'This number is not listed as spam.';
+        spamResult.className = 'safe';
+      }
+    }
+
+    checkPasswordBtn.addEventListener('click', displayStrength);
+    passwordInput.addEventListener('input', () => {
+      strengthResult.textContent = '';
+      strengthResult.className = '';
+    });
+
+    checkWebsiteBtn.addEventListener('click', () => {
+      const url = websiteInput.value.trim();
+      checkWebsiteSecurity(url);
+    });
+    websiteInput.addEventListener('input', () => {
+      securityResult.textContent = '';
+      securityResult.className = '';
+    });
+
+    checkPhoneBtn.addEventListener('click', () => {
+      const num = phoneInput.value.trim();
+      checkSpamPhoneNumber(num);
+    });
+    phoneInput.addEventListener('input', () => {
+      spamResult.textContent = '';
+      spamResult.className = '';
+    });
+
+    // Initialize on load
+    setActiveCategory('general');
+  })();
+</script>
+
+</body>
+</html>
